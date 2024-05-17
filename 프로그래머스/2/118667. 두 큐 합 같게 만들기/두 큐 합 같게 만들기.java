@@ -15,7 +15,7 @@ class Solution {
         }
         
         // 순회 
-        int limit = 3 * queue1.length;
+        int limit = 4 * queue1.length;
         while(ans <= limit) {
              // 큰쪽의 원소 ->  작은쪽큐의 원소로 이동.
             if(q1Sum[0] > q2Sum[0]) {
