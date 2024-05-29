@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -46,7 +45,7 @@ public class Main {
         Deque<Entry> q = new ArrayDeque<>();
         Set<String> visited = new HashSet<>();
         q.add(new Entry(red, blue, 0));
-        visited.add(red.r + " " + red.c + " " + blue.r + " " + blue.c);
+        visited.add(red.r + "" + red.c + "" + blue.r + "" + blue.c);
 
         while (!q.isEmpty()) {
             Entry cur = q.poll();
@@ -55,25 +54,36 @@ public class Main {
             for (int i = 0; i < 4; i++) {
                 Point nextRed = move(cur.red, i, grid, n, m);
                 Point nextBlue = move(cur.blue, i, grid, n, m);
-
+                
                 if (grid[nextBlue.r][nextBlue.c] == 'O') continue;
 
                 if (grid[nextRed.r][nextRed.c] == 'O') return 1;
 
                 if(nextRed.r == nextBlue.r && nextRed.c == nextBlue.c) {
                     if (i == 0) {
-                        if (cur.red.c > cur.blue.c) nextBlue.c -= 1; else nextRed.c -= 1;
+                        if (cur.red.c > cur.blue.c) 
+                            nextBlue.c -= 1; 
+                        else 
+                            nextRed.c -= 1;
                     } else if (i == 1) {
-                        if (cur.red.c > cur.blue.c) nextRed.c += 1; else nextBlue.c += 1;
+                        if (cur.red.c > cur.blue.c) 
+                            nextRed.c += 1; 
+                        else 
+                            nextBlue.c += 1;
                     } else if (i == 2) {
-                        if (cur.red.r > cur.blue.r) nextBlue.r -= 1; else nextRed.r -= 1;
+                        if (cur.red.r > cur.blue.r) 
+                            nextBlue.r -= 1; 
+                        else nextRed.r -= 1;
                     } else if (i == 3) {
-                        if (cur.red.r > cur.blue.r) nextRed.r += 1; else nextBlue.r += 1;
+                        if (cur.red.r > cur.blue.r) 
+                            nextRed.r += 1; 
+                        else 
+                            nextBlue.r += 1;
                     }
                 }
 
 
-                String state = nextRed.r + " " + nextRed.c + " " + nextBlue.r + " " + nextBlue.c;
+                String state = nextRed.r + "" + nextRed.c + "" + nextBlue.r + "" + nextBlue.c;
                 if (!visited.contains(state)) {
                     visited.add(state);
                     q.add(new Entry(nextRed, nextBlue, cur.distance + 1));
