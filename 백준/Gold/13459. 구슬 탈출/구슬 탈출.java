@@ -1,10 +1,17 @@
+
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.*;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import java.io.*;
 import java.util.*;
 
 public class Main {
-
     public static int[] dr = {0, 0, 1, -1};
     public static int[] dc = {1, -1, 0, 0};
 
@@ -49,11 +56,11 @@ public class Main {
                 Point nextRed = move(cur.red, i, grid, n, m);
                 Point nextBlue = move(cur.blue, i, grid, n, m);
 
-                if (grid[nextBlue.r][nextBlue.c] == 'O') continue; // If blue falls in the hole, skip
+                if (grid[nextBlue.r][nextBlue.c] == 'O') continue;
 
-                if (grid[nextRed.r][nextRed.c] == 'O') return 1; // If red falls in the hole, success
+                if (grid[nextRed.r][nextRed.c] == 'O') return 1;
 
-                if (nextRed.equals(nextBlue)) { // Resolve conflicts
+                if(nextRed.r == nextBlue.r && nextRed.c == nextBlue.c) {
                     if (i == 0) {
                         if (cur.red.c > cur.blue.c) nextBlue.c -= 1; else nextRed.c -= 1;
                     } else if (i == 1) {
@@ -64,6 +71,7 @@ public class Main {
                         if (cur.red.r > cur.blue.r) nextRed.r += 1; else nextBlue.r += 1;
                     }
                 }
+
 
                 String state = nextRed.r + " " + nextRed.c + " " + nextBlue.r + " " + nextBlue.c;
                 if (!visited.contains(state)) {
@@ -110,17 +118,18 @@ public class Main {
             this.c = c;
         }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Point point = (Point) obj;
-            return r == point.r && c == point.c;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(r, c);
-        }
+//        @Override
+//        public boolean equals(Object obj) {
+//            if(this == obj) return true;
+//            if (obj == null || getClass() != obj.getClass()) return false;
+//            Point point = (Point) obj;
+//            return r == point.r && c == point.c;
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            return Objects.hash(r, c);
+//        }
     }
+
 }
