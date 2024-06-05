@@ -5,7 +5,6 @@ class Solution {
     // fares = u <->v w
     // 반환: 최저 금액 리턴.
     public int solution(int n, int s, int a, int b, int[][] fares) {
-        int ans = Integer.MAX_VALUE;
         // 무방향그래프 
         Map<Integer, List<Info>> graph = new HashMap<>();
         for(int[] info: fares) {
@@ -18,43 +17,37 @@ class Solution {
             graph.get(v).add(new Info(u,w));
         }
         
+        // 각행은 s,a,b에서의 최소비용을 담은 리스트
         int INF = Integer.MAX_VALUE;
         int[][] visited = new int[3][n+1];
         for(int[] d: visited) {
             Arrays.fill(d, INF);    
         }
-        Queue<Info> pq = new PriorityQueue<>();
-        int[] arr = {s,a,b};
-        for(int i = 0; i < 3;i++) {
-            dijkstra(arr[i],visited,i, graph,pq);    
-        }
-
-        // for(int[] d: visited) {
-        //     for(int z :d) {
-        //         System.out.printf("%d ", z);
-        //     }
-        //     System.out.println();
-        // }        
-
+        
+        // 각각 다익스트라 수행.
+        dijkstra(s,visited,0, graph);
+        dijkstra(a,visited,1, graph);
+        dijkstra(b,visited,2, graph);
+        
+        // ans는 최소비용.
+        int ans = Integer.MAX_VALUE;
         for(int i =0; i< n+1;i++) {
-            int sum = 0;
-            for(int[] d: visited) {
-                sum += d[i];
+            int temp = 0;
+            for(int[] row: visited) {
+                int xMinCost = row[i];
+                temp += xMinCost;
             }
-            ans = Math.min(sum, ans);
+            ans = Math.min(ans,temp);
         }
         
         
         return ans;
     }
     
-    public static void dijkstra(int s, int[][] visited, int idx, Map<Integer, List<Info>> graph, Queue<Info> pq) {
-        pq.offer(new Info(s, 0));
-        // pq.offer(new Info(a,0));
-        // pq.offer(new Info(b,0));
-        visited[idx][s] = 0;
-        // visited[a] = 0;
-        // visited[b] = 0;
+    public static void dijkstra(int pos, int[][] visited, int idx, Map<Integer, List<Info>> graph) {
+        Queue<Info> pq = new PriorityQueue<>();
+        pq.offer(new Info(pos, 0));
+        visited[idx][pos] = 0;
 
         while(!pq.isEmpty()) {
             Info cur = pq.poll();
@@ -72,6 +65,7 @@ class Solution {
         
         }
     }
+    
     public static class Info implements Comparable<Info>{
         int node;
         int weight;
