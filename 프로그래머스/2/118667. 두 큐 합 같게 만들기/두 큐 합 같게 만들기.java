@@ -1,49 +1,55 @@
 import java.util.*;
-class Solution {
 
+
+class Solution {
     public int solution(int[] queue1, int[] queue2) {
         int ans = 0;
-        long[] q1Sum = new long[1];
-        long[] q2Sum = new long[1];
-        Deque<Integer> q1 = initQueue(queue1, q1Sum);
-        Deque<Integer> q2 = initQueue(queue2, q2Sum);
-
-        // 홀수이면 -1 반환.
-        long total = (q1Sum[0] + q2Sum[0]);
-        if(total % 2 == 1) {
+        long[] q1sum = {0};
+        long[] q2sum = {0};
+        Deque<Integer> q1 = initQueue(queue1, q1sum);
+        Deque<Integer> q2 = initQueue(queue2, q2sum);
+        
+        long sum = q1sum[0] + q2sum[0];
+        
+        
+        if( sum % 2 != 0 || sum == 0) {
             return -1;
         }
         
-        // 순회 
-        int limit = 4 * queue1.length;
-        while(ans <= limit) {
-             // 큰쪽의 원소 ->  작은쪽큐의 원소로 이동.
-            if(q1Sum[0] > q2Sum[0]) {
-                int addNum = q1.poll();
-                q2.offer(addNum);
-                q1Sum[0]-=addNum;
-                q2Sum[0]+=addNum;
-            } else if (q1Sum[0] < q2Sum[0]) {
-                int addNum = q2.poll();
-                q1.offer(addNum);
-                q1Sum[0]+=addNum;
-                q2Sum[0]-=addNum;
+        int limit = 4 * (q1.size() + q2.size());
+        
+        
+        while(ans < limit) {
+            
+            if(q1sum[0] > q2sum[0]) {
+                Integer get = q1.poll();
+                q2.offer(get);
+                q1sum[0]-=get;
+                q2sum[0]+=get;
+                ans++;
+            } else if(q1sum[0] < q2sum[0]){
+                Integer get = q2.poll();
+                q1.offer(get);
+                q1sum[0]+=get;
+                q2sum[0]-=get;
+                ans++;
             } else {
                 return ans;
             }
-            ans++;
+            
+            
         }
 
+        
         return -1;
     }
     
-    private static Deque<Integer> initQueue(int[] queue, long[] qSum) {
-        Deque<Integer> q = new ArrayDeque<>();
-        for(int num: queue) {
-            q.offer(num);
-            qSum[0]+=num;
+    public static Deque<Integer> initQueue(int[] queue1, long[] sum) {
+        Deque<Integer> temp = new ArrayDeque<>();
+        for(int a: queue1) {
+            sum[0] += a;
+            temp.offer(a);
         }
-        return q;
+        return temp;
     }
-    
 }
