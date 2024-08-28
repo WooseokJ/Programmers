@@ -1,81 +1,72 @@
 import java.util.*;
+
 class Solution {
-    
-    // 1~n 개 노드 
-    // fares = u <->v w
-    // 반환: 최저 금액 리턴.
     public int solution(int n, int s, int a, int b, int[][] fares) {
-        // 무방향그래프 
         Map<Integer, List<Info>> graph = new HashMap<>();
-        for(int[] info: fares) {
-            int u = info[0];
-            int v = info[1];
-            int w = info[2];
-            graph.putIfAbsent(u,new ArrayList<>());
-            graph.putIfAbsent(v,new ArrayList<>());
-            graph.get(u).add(new Info(v, w));
-            graph.get(v).add(new Info(u,w));
+        for(int[] info : fares) {
+            int curNode = info[0];
+            int nextNode = info[1];
+            int weight = info[2];
+            graph.putIfAbsent(curNode, new ArrayList<>());
+            graph.putIfAbsent(nextNode, new ArrayList<>());
+            graph.get(curNode).add(new Info(nextNode, weight));
+            graph.get(nextNode).add(new Info(curNode, weight));
         }
         
-        // 각행은 s,a,b에서의 최소비용을 담은 리스트
         int INF = Integer.MAX_VALUE;
+        // 시작(s), a, b 지점 에서 x까지 다익스트라.
         int[][] visited = new int[3][n+1];
-        for(int[] d: visited) {
-            Arrays.fill(d, INF);    
+        for(int[] row: visited) {
+            Arrays.fill(row, INF);
         }
         
-        // 각각 다익스트라 수행.
-        dijkstra(s,visited,0, graph);
-        dijkstra(a,visited,1, graph);
-        dijkstra(b,visited,2, graph);
+        dijkstra(s, visited, 0,graph);
+        dijkstra(a, visited, 1,graph);
+        dijkstra(b, visited, 2,graph);
         
-        // ans는 최소비용.
-        int ans = Integer.MAX_VALUE;
-        for(int i =0; i< n+1;i++) {
-            int temp = 0;
-            for(int[] row: visited) {
-                int xMinCost = row[i];
-                temp += xMinCost;
+        int ans = INF;
+        
+        for(int i =0; i < visited[0].length; i++) {
+            int sum = 0;
+            for(int[] rr: visited) {
+                sum += rr[i];
             }
-            ans = Math.min(ans,temp);
+            ans = Math.min(sum, ans);
         }
-        
         
         return ans;
-    }
-    
-    public static void dijkstra(int pos, int[][] visited, int idx, Map<Integer, List<Info>> graph) {
-        Queue<Info> pq = new PriorityQueue<>();
-        pq.offer(new Info(pos, 0));
-        visited[idx][pos] = 0;
+        
 
+    }
+    public static void dijkstra(int curNode, int[][] visited, int rowNum, Map<Integer, List<Info>> graph) {
+        Queue<Info> pq = new PriorityQueue<>();
+        pq.offer(new Info(curNode, 0));
+        visited[rowNum][curNode] = 0;
+        
         while(!pq.isEmpty()) {
             Info cur = pq.poll();
-            if(visited[idx][cur.node] < cur.weight) continue;
+            if(visited[rowNum][cur.node] < cur.weight) continue;
             if(graph.containsKey(cur.node)) {
-                List<Info> arr = graph.get(cur.node);
-                for(Info next: arr) {
-                    int newWeight = next.weight + cur.weight;
-                    if(newWeight < visited[idx][next.node]) {
-                        visited[idx][next.node] = newWeight;
-                        pq.add(new Info(next.node, newWeight));
+                for(Info next: graph.get(cur.node)) {
+                    int totalWeight = next.weight + cur.weight;
+                    if(totalWeight < visited[rowNum][next.node]) {
+                        visited[rowNum][next.node] = totalWeight;
+                        pq.add(new Info(next.node, totalWeight));
                     }
                 }
             }
-        
         }
+        
     }
-    
-    public static class Info implements Comparable<Info>{
-        int node;
-        int weight;
+    public static class Info implements Comparable<Info> {
+        int node, weight;
         public Info(int node, int weight) {
             this.node = node;
             this.weight = weight;
         }
         @Override
         public int compareTo(Info o) {
-            return this.weight - o.weight; //최소힙.
+            return this.weight - o.weight;
         }
     }
 }
