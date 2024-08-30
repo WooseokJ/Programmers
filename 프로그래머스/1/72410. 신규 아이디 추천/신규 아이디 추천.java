@@ -1,102 +1,68 @@
-
+import java.util.*;
 
 class Solution {
     public String solution(String new_id) {
-        // 1단계
-        String step1 = new_id.toLowerCase();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder ans = new StringBuilder();
+        
+        // 1단계 대 -> 소 
+        ans.append(new_id.toLowerCase());
 
-        // 2단계 
-        int dotCnt = 0;
-        StringBuilder temp = new StringBuilder();
-        for(int i =0; i < step1.length(); i++) {
-            Character keyword = step1.charAt(i);
-            if(Character.isDigit(keyword)) { // 숫자면 true
-                temp.append(keyword);
-                continue;
-            } 
-            if(Character.isLowerCase(keyword)) { // 소문자면 넣기
-                temp.append(keyword);
-                continue;
-            }
-            
-            if(keyword == '-') {
-                temp.append(keyword);
-                continue;
-            } 
-            if(keyword == '_') {
-                temp.append(keyword);
-                continue;
-            } 
-            if(keyword == '.') {
-                temp.append(keyword);
-                dotCnt++;
-                continue;
-            }
-        }
-        String step2 = temp.toString();
-        System.out.println("2: "+step2);
-        
-        // 3단계 
-        String step3 = step2;
-        while (step3.contains("..")) {
-            step3 = step3.replace("..", ".");
-        }
-        System.out.println("3: "+step3);
-        
-        
-         // 4단계 
-        String step4 = step3;
-        if(step4.charAt(0) == '.') {
-            step4 =  step4.substring(1, step4.length());
+        // 2단계 소문자, 숫자, - , _ , . 제외 모든문자 제거.
+        for(int i = 0; i < ans.length(); i++) {
+            char word = ans.charAt(i);
+            // 소문자 혹은 숫자 
+            if(Character.isLowerCase(word) || Character.isDigit(word)) continue;
+            if(word == '-' || word == '_' || word == '.' )  continue;           
+            ans.deleteCharAt(i);
+            i--;
         }
         
-        // 왜안돼?
-        // if(step4.charAt(step4.length()-1) == '.') { // 이 조건문에서 애초에  StringIndexOutOfBoundsException: String index out of range: -1 에러 
-            // step4 = step4.substring(0,step4.length()-1);
+        // 3단계  .. 가 연속이면 . 로 
+        while(ans.indexOf("..") != -1) {
+            int idx = ans.indexOf("..");
+            ans.replace(idx, idx+2, ".");
+        }
+        
+        // 4단계 .가 처음이나 끝이면 제거 .
+        if(ans.charAt(0) == '.' && ans.length() > 0) {
+          ans.deleteCharAt(0);  
+        } 
+        
+        // if(ans.charAt(ans.length() -1) == '.' && ans.length() > 0) {
+        //     ans.deleteCharAt(ans.length()-1);  
         // }
-        
-        
-        if(step4.endsWith(".")) {
-            step4 = step4.substring(0,step4.length()-1);
+
+        if(ans.length() > 0 && ans.charAt(ans.length() -1) == '.') {
+            ans.deleteCharAt(ans.length()-1);
         }
-        System.out.println("4: "+step4);
-        
-        // 5단계 
-        String step5 = step4;
-        
-        if(step5.isEmpty()) {
-            step5 = "a";
-        }
-        System.out.println("5: "+step5);
-        
-        // 6단계
-        String step6 = step5;
-        if(step6.length() >= 16) {
-            step6 = step6.substring(0,15);
-            if(step6.charAt(step6.length() - 1) == '.') {
-                step6 = step6.substring(0,step6.length() - 1);
-            }
-        }
-        System.out.println("6: "+step6);
-        
-        // 7단계
-        String step7 = step6;
-        
-        while (step7.length() < 3) {
-            step7 += step7.charAt(step7.length()-1);
+
+        // 5단계 빈문자열은 "a"로 대입
+        if(ans.length() == 0) ans.append("a");
+        // 6단계 16글자 이상이면 15문자 제외 나머지 뒤에 제거 , 만약 제거후 . 가 끝에 위치하면 . 제거.
+        while(ans.length() >= 16) {
+            ans.replace(15, ans.length(), "");
+                   
+            if(ans.charAt(ans.length()-1) == '.' )
+                ans.deleteCharAt(ans.length()-1);
         }
             
+     
         
-        return step7;
+        
+        
+        // 7단계 : 2자 이하면 글자길이 3 될떄까지 반복
+        while(ans.length() > 0 && ans.length() <= 2) {
+            char addWord = ans.charAt(ans.length()-1);
+            ans.append(addWord);
+        }
+        
+        
+        
+            
+        
+        return ans.toString();
+        
+        
+        
     }
 }
-
-
-// 1: 대 -> 소
-// 2: 소 num - _ . 제외 모든문자 제거.
-// 3: .. -> . (.두개이상 -> 1개로)
-// 4: 처음,마지막 . 있으면 제거.
-// 5: "" -> "a" 대입
-// 6: 16글자 이상시 -> 앞에서부터 15글자까지만(근데 만약 .으로 끝나면 .도 제거 )
-// 7: 2글자 이하시 -> 마지막글자 반복해서 3글자까지 완성.
