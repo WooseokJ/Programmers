@@ -2,59 +2,54 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
-        
         int[] ans = new int[id_list.length];
-        // Create a set to ensure unique reports
-        Set<String> uniqueReports = new HashSet<>(Arrays.asList(report));
         
-        // Report count map
-        Map<String, Integer> reportCount = new HashMap<>();
-        // Initialize report count map
-        for (String id : id_list) {
-            reportCount.put(id, 0);
+        // 중복제거 
+        Set<String> distictReport = new HashSet<>(Arrays.asList(report));
+        
+        // 이름, 신고받은횟수 초기화과정
+        Map<String, Integer> memo = new HashMap<>();
+        for(String id: id_list)
+            memo.put(id, 0);
+        
+        // 신고자, 신고자가 신고한 리스트
+        Map<String, Set<String>> reportList = new HashMap<>();
+        
+        for(String temp: distictReport) {
+            String front = temp.split(" ")[0]; // 신고자
+            String back = temp.split(" ")[1]; // 신고당한자
+            memo.put(back, memo.get(back) + 1); // 신고당한자 +1 \
+            reportList.putIfAbsent(front, new HashSet<>());
+            reportList.get(front).add(back);
         }
+     
         
-        // Reporters map
-        Map<String, Set<String>> reportersMap = new HashMap<>();
-        
-        // Process each report
-        for (String rep : uniqueReports) {
-            String[] parts = rep.split(" ");
-            String reporter = parts[0];
-            String reported = parts[1];
-            
-            // Update report count
-            reportCount.put(reported, reportCount.get(reported) + 1);
-            
-            // Update reporters map
-            if (!reportersMap.containsKey(reporter)) {
-                reportersMap.put(reporter, new HashSet<>());
-            }
-            reportersMap.get(reporter).add(reported);
-        }
-        
-        // Create a set of banned users
-        Set<String> bannedUsers = new HashSet<>();
-        for (Map.Entry<String, Integer> entry : reportCount.entrySet()) {
-            if (entry.getValue() >= k) {
-                bannedUsers.add(entry.getKey());
+        Set<String> stopUser = new HashSet<>();
+        for(Map.Entry<String, Integer> entry: memo.entrySet()) {
+            Integer count = entry.getValue();
+            if(count >= k) {
+                String name = entry.getKey();
+                stopUser.add(name);
             }
         }
+        System.out.println(stopUser);
         
-        // Create the result array
-        int[] result = new int[id_list.length];
-        for (int i = 0; i < id_list.length; i++) {
-            String user = id_list[i];
-            if (reportersMap.containsKey(user)) {
-                Set<String> reportedUsers = reportersMap.get(user);
-                for (String reportedUser : reportedUsers) {
-                    if (bannedUsers.contains(reportedUser)) {
-                        result[i]++;
+        for(int i = 0; i < id_list.length ; i++) {
+            String userName = id_list[i];
+            if(reportList.containsKey(userName)) {
+                for(String back: reportList.get(userName)) {
+                    if(stopUser.contains(back)) {
+                        ans[i]++;
                     }
                 }
             }
         }
         
-        return result;
+        
+        
+        return ans;
+        
+        
+        
     }
 }
