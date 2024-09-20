@@ -1,11 +1,7 @@
--- 코드를 작성해주세요
-select count(fish_type) as FISH_COUNT, max(length) as MAX_LENGTH, fish_type as FISH_TYPE
-from FISH_INFO
+select count(fish_type) as fish_count, max(length) as max_length, fish_type
+from  fish_info
+group by FISH_TYPE
+having avg(ifnull(length, 10)) >= 33
 
-group by fish_type
-having AVG(ifnull(length, 10)) >= 33
-order by fish_type
-
-
-
+order by FISH_TYPE
 ;
