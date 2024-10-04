@@ -1,20 +1,20 @@
 -- 코드를 입력하세요
-SELECT food_type, rest_id, rest_name, favorites
-from rest_info
-where FAVORITES in (select max(FAVORITES) from rest_info group by food_type)
-group by food_type
+# SELECT *, max(favorites)
+# select *
+select food_type, rest_id, rest_name, max(favorites) as favorites
+from REST_INFO
+where favorites in (select max(favorites) 
+                   from rest_info 
+                  group by food_type)
+group by FOOD_TYPE
 order by food_type desc
-                      
-
 ;
 
+# REST_ID, REST_NAME, FOOD_TYPE, VIEWS, FAVORITES, PARKING_LOT, ADDRESS, TEL
+# 식당 ID, 식당 이름, 음식 종류, 조회수, 즐겨찾기수, 주차장 유무, 주소, 전화번호
 
-# 한식	00001	은돼지식당	734
-# 중식	00015	만정	20
-# 일식	00002	하이가쯔네	230
-# 양식	00003	따띠따띠뜨	102
-# 분식	00008	애플우스	151
-
-# from where group by having select order by
-# 이전: food_type기준 그룹화후, select통해 max를 찾음.
-# 이후: food_type별 가장많은 favorite레코드 찾고 그다음 그룹화.
+    # 00001	은돼지식당	한식	1150345	734
+	# 00015	만정	중식	12340	20
+    # 00004	스시사카우스	일식	1522074	230
+    # 00003	따띠따띠뜨	양식	1234023	102
+    # 00008	애플우스	분식	15340	151
