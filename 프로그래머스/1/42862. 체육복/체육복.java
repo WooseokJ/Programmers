@@ -1,39 +1,58 @@
 import java.util.*;
-
 class Solution {
-    public int solution(int n, int[] lost, int[] reserve) {
-        Set<Integer> lostSet = new HashSet<>();
-        Set<Integer> reserveSet = new HashSet<>();
+    public int solution(int n, int[] l, int[] reserve) {
         
-        // 여벌 가져온 사람
-        for(int i: reserve) {
-            reserveSet.add(i);
-        }
-        // 체육복 잃어버린 사람 처리
-        for(int p: lost) {
+        List<Integer> lost = new ArrayList<>();
+        for(int temp: l)
+            lost.add(temp);
+        
+        List<Integer> students = new ArrayList<>();
+        for(int i =1; i<= n; i++)
+            if(!lost.contains(i)) {
+                students.add(i);
+            }
+       
+       
+       
+        // student 7 8 9 10 
+        // lost, 1 2 3 4 5 6
+        // reserve 1 2 3 , 
+        // 
+
+        for(int add: reserve) {
+            if(lost.contains(add)) {
+                if(!students.contains(add)) {
+                    students.add(add);    
+                }
+                continue;   
+            }
             
-            // 여벌 가져온 사람이 잃어버린 경우
-            if(reserveSet.contains(p)) {
-                reserveSet.remove(p);
-            } else { // 잃어버리기만한경우
-                lostSet.add(p);
+            int pre = add-1;
+            int back = add +1;
+            
+            // 2, 4 
+            if(!students.contains(pre)) {
+                if(pre != 0) {
+                    students.add(pre);   
+                }
+                
+            } else if(!students.contains(back)) {
+                if(back != n+1) {
+                    students.add(back);   
+                }   
             }
         }
         
-        // 잃어버린 사람에게 빌려줄경우
-        for(Integer i : reserveSet) {
-            // 앞 번호 줄수있는경우
-            if(lostSet.contains(i-1)) {
-                lostSet.remove(i-1);
-            } else if(lostSet.contains(i+1)) { // 뒷번호 에게 줄수있는경우
-                lostSet.remove(i+1);
-            }
-        }
-        return n - lostSet.size();
         
+        return students.size();
         
-        
-        
-        
+
     }
 }
+
+
+
+// 1 -> 2,0
+// 3 -> 4,2
+// 5-> 4,6
+
