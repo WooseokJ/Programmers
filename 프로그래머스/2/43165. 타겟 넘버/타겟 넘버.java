@@ -1,60 +1,47 @@
 import java.util.*;
 class Solution {
-    static List<List<Integer>> arr = new ArrayList<>();
     public int solution(int[] numbers, int target) {
-        
+        int ans = 0;
+        List<List<Integer>> arr = new ArrayList<>();
         int n = numbers.length;
-        
-    // 0,1,2,3 -> ++++ ~ ---- n 개중 1개 
+        for(int i =0; i < n; i++)
+            backtrack(new ArrayList<>(), 0, n, i, arr);
         
 
-        for(int i =0; i < numbers.length; i++) {
-            backtrack(new ArrayList<>(), 0, numbers.length,i,arr);    
-        }
-        int ans =0;
-        // System.out.println(arr);
-        for(List<Integer> idxArr : arr) {
-            List<Integer> temp = new ArrayList<>();
+        
+        for(List<Integer> a: arr) {
+            int[] copy = Arrays.copyOf(numbers, n);
             
-            for(int i =0;i < numbers.length; i++)
-                temp.add(numbers[i]);
-            
-            for(Integer idx: idxArr) {
-                temp.set(idx, -1 * numbers[idx]);   
+            for(Integer b: a) {
+                copy[b] *= -1;
             }
-            
-            // 
             int sum = 0;
-            for(int i =0; i < temp.size(); i++) {
-                sum+= temp.get(i);
-            }
-            
-            if(sum == target) {
-                
-                
-                ans++;
-            }
+            for(int t: copy)
+                sum+=t;
+            if(sum == target) ans++;
         }
+            
+        
         
         
         return ans;
-        
-
     }
-    public static void backtrack(List<Integer> curr, int idx, int n , int k, List<List<Integer>> ans ) {
-        if(curr.size() == k) {
-            ans.add(new ArrayList<>(curr));    
+    public static void backtrack(List<Integer> cur, int start, int n ,int k, List<List<Integer>> ans) {
+        if(cur.size() == k) {
+            ans.add(new ArrayList<>(cur));
             return;
         }
-        for(int i = idx; i < n; i++) {
-            curr.add(i);
-            backtrack(curr, i+1, n, k, ans );
-            curr.remove(curr.size()-1);
+        for(int i = start; i < n; i++) {
+            cur.add(i);
+            backtrack(cur, i+1, n,k,ans);
+            cur.remove(cur.size()-1);
+                
         }
         
-    }
-    
-    
         
- 
+            
+        
+            
+        
+    }
 }
