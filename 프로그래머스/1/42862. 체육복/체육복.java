@@ -1,41 +1,39 @@
 import java.util.*;
+
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        int ans = 0;
-        ans = n - lost.length;
+        Set<Integer> lostSet = new HashSet<>();
+        Set<Integer> reserveSet = new HashSet<>();
         
-        Arrays.sort(lost);
-        Arrays.sort(reserve);
-        
-        for(int i =0; i < lost.length; i++) {
-            for(int j = 0; j < reserve.length; j++) {
-                // 여벌갖은 학생이 도난경우.
-                if(lost[i] == reserve[j]) {
-                    ans++;
-                    lost[i] = -1;
-                    reserve[j] = -1;
-                    break;
-                }
+        // 여벌 가져온 사람
+        for(int i: reserve) {
+            reserveSet.add(i);
+        }
+        // 체육복 잃어버린 사람 처리
+        for(int p: lost) {
+            
+            // 여벌 가져온 사람이 잃어버린 경우
+            if(reserveSet.contains(p)) {
+                reserveSet.remove(p);
+            } else { // 잃어버리기만한경우
+                lostSet.add(p);
             }
         }
         
-        for(int i = 0; i < lost.length; i++) {
-            for(int j = 0; j < reserve.length; j++) {
-                if(lost[i] - 1 == reserve[j] || 
-                  lost[i]  +1 == reserve[j])  {
-                    ans++;
-                    reserve[j] = -1;
-                    break;
-                }
+        // 잃어버린 사람에게 빌려줄경우
+        for(Integer i : reserveSet) {
+            // 앞 번호 줄수있는경우
+            if(lostSet.contains(i-1)) {
+                lostSet.remove(i-1);
+            } else if(lostSet.contains(i+1)) { // 뒷번호 에게 줄수있는경우
+                lostSet.remove(i+1);
             }
         }
+        return n - lostSet.size();
         
         
-        return ans;
+        
+        
+        
     }
 }
-//4 -> 3 5 
-// n : 전체 학생
-// lost: 도난 학생번호
-// reserve: 여벌 체육복 갖은 학생. -> 2,4둘중하
-// return: 체육듣는 최대학생. 
