@@ -2,38 +2,51 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        Set<Integer> lostSet = new HashSet<>();
-        Set<Integer> reserveSet = new HashSet<>();
         
-        // 여벌 가져온 사람
-        for(int i: reserve) {
-            reserveSet.add(i);
-        }
-        // 체육복 잃어버린 사람 처리
-        for(int p: lost) {
-            
-            // 여벌 가져온 사람이 잃어버린 경우
-            if(reserveSet.contains(p)) {
-                reserveSet.remove(p);
-            } else { // 잃어버리기만한경우
-                lostSet.add(p);
+        int ans = n - lost.length;
+        Arrays.sort(lost);
+        Arrays.sort(reserve);
+        
+
+        // 빌려줄수있는놈이 잃어버린경우(reserve -1로 바꿔서 못빌려줘)
+        for(int i =0; i < lost.length; i++) {
+            for(int j =0; j < reserve.length; j++) {
+                if(lost[i] == reserve[j]) {
+                    reserve[j] = -1;
+                    lost[i] = -1;
+                    ans++;
+                    break;
+                }
             }
         }
+
+        // System.out.println(ans + " " + Arrays.toString(lost) + " " + Arrays.toString(reserve) );
+  
+        // 3 -> 2,4번  
+        // 1 -> 0, 2번.. 
         
-        // 잃어버린 사람에게 빌려줄경우
-        for(Integer i : reserveSet) {
-            // 앞 번호 줄수있는경우
-            if(lostSet.contains(i-1)) {
-                lostSet.remove(i-1);
-            } else if(lostSet.contains(i+1)) { // 뒷번호 에게 줄수있는경우
-                lostSet.remove(i+1);
+        // 잃어버린애 빌려주기(reserve +1,-1 해서 lost일치하는지 보기.)
+        for(int i= 0; i < lost.length; i++) {
+            for(int j =0; j < reserve.length; j++) {
+                if(lost[i] == reserve[j] + 1 || 
+                    lost[i] == reserve[j] -1) {
+                    
+                    // lost[i] = -1;
+                    reserve[j] = -1;
+                    ans++;
+                    
+                    break;
+                   
+                }
             }
         }
-        return n - lostSet.size();
+   
+        // System.out.println(ans + " " + Arrays.toString(lost) + " " + Arrays.toString(reserve) );
         
         
         
         
         
+        return ans;
     }
 }
