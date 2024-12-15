@@ -1,81 +1,82 @@
 import java.util.*;
-
 class Solution {
     public String solution(int[] numbers, String hand) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder ans = new StringBuilder();
         
-        // 1,3,7 / 3,6, 9 맵에넣고 L, R 판단.
-        Map<Integer, Character> map = new HashMap<>();
-        Map<Integer, Point> p = new HashMap<>();
-        p.put(0, new Point(3,1));
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1,"L");
+        map.put(4,"L");
+        map.put(7,"L");
+        map.put(3,"R");
+        map.put(6,"R");
+        map.put(9,"R");
         
-        for(int i = 1;i < 10; i++) {
-            if(i % 3 == 0) {
-                map.put(i,'R');
-                p.put(i, new Point(i/3 -1 , 2)); // 6 -> 1,2
-                
-            } else if(i % 3 == 1) {
-                map.put(i,'L');
-                p.put(i, new Point( i / 3 , 0 ));
-            } else {
-                p.put(i, new Point(i / 3, 1));
-            }
-        }
+        Map<Integer, List<Integer>> point = new HashMap<>();
+        point.put(1, new ArrayList<>(Arrays.asList(0,3)));
+        point.put(4, new ArrayList<>(Arrays.asList(0,2)));
+        point.put(7, new ArrayList<>(Arrays.asList(0,1)));
+        point.put(3, new ArrayList<>(Arrays.asList(2,3)));
+        point.put(6, new ArrayList<>(Arrays.asList(2,2)));
+        point.put(9, new ArrayList<>(Arrays.asList(2,1)));
         
-        // 손가락 위치.
-        int[] left = {3,0};
-        int[] right = {3,2};
+        point.put(2, new ArrayList<>(Arrays.asList(1,3)));
+        point.put(5, new ArrayList<>(Arrays.asList(1,2)));
+        point.put(8, new ArrayList<>(Arrays.asList(1,1)));
+        point.put(0, new ArrayList<>(Arrays.asList(1,0)));
+        
+        int[] l = {0,0};
+        int[] r = {2,0};
         
         for(int num: numbers) {
-            Point t = p.get(num);
-            if(map.containsKey(num)) {
-                Character c = map.get(num);
-                sb.append(c);
-                if(c == 'L') {
-                    left[0] = t.r;
-                    left[1] = t.c;
-                } else if(c == 'R') {
-                    right[0] = t.r;
-                    right[1] = t.c;
+            System.out.println(Arrays.toString(l) + " " + Arrays.toString(r));
+            if(map.containsKey(num)) { //양끝 
+                String str = map.get(num);
+                ans.append(str);
+
+                if(str.contains("L")) {
+                    l[0] = point.get(num).get(0);
+                    l[1] = point.get(num).get(1);
+                } else {
+                    r[0] = point.get(num).get(0);
+                    r[1] = point.get(num).get(1);
                 }
-            } else { // // 2, 5 8, 0 은 손가락 위치와의 거리 계산. abs로 
-                int temp1 = Math.abs(t.r - left[0]) + Math.abs(t.c - left[1]);
-                int temp2 = Math.abs(t.r - right[0]) + Math.abs(t.c - right[1]);
-                if(temp1 < temp2) { // 'L'
-                    sb.append('L');
-                    left[0] = t.r;
-                    left[1] = t.c;
-                } else if( temp1 > temp2){
-                    sb.append('R');
-                    right[0] = t.r;
-                    right[1] = t.c;
-                } else { // 거리 같으면 
-                    if(hand.equals("left")) {
-                        sb.append('L');
-                        left[0] = t.r;
-                        left[1] = t.c;
+            } else { // 이외 숫자.
+
+                List<Integer> pos = point.get(num);
+                int x = pos.get(0);
+                int y = pos.get(1);
+                // System.out.println(x + " " + y);
+                int n1 = Math.abs(x-l[0]) + Math.abs(y-l[1]);
+                int n2 = Math.abs(x-r[0]) + Math.abs(y-r[1]);
+                // System.out.println(num + " " + n1 + " " + n2);
+                if(n1 > n2) { // 오른이 더 짧아 
+                    ans.append("R");
+                    r[0] = point.get(num).get(0);
+                    r[1] = point.get(num).get(1);
+                    
+                } else if(n1 < n2) {
+                    ans.append("L");
+                     l[0] = point.get(num).get(0);
+                    l[1] = point.get(num).get(1);
+                } else {
+                    if(hand.equals("right")) {
+                        ans.append("R");
+                        r[0] = point.get(num).get(0);
+                        r[1] = point.get(num).get(1);
                     } else {
-                        sb.append('R');
-                        right[0] = t.r;
-                        right[1] = t.c;
+                        ans.append("L");
+                        l[0] = point.get(num).get(0);
+                        l[1] = point.get(num).get(1);
                     }
                 }
+                
+                
             }
-            
+                    
             
         }
         
         
-        
-        
-        return sb.toString();
+        return ans.toString();
     }
-    public static class Point{
-        int r, c;
-        Point(int r, int c) {
-            this.r = r;
-            this.c = c;
-        }
-    }
-    
 }
