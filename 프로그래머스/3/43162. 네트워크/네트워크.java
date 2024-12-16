@@ -1,25 +1,35 @@
+import java.util.*;
+
 class Solution {
+    static int ans = 0;
     public int solution(int n, int[][] computers) {
-        int ans = 0;
-        boolean[] visited= new boolean[n]; // 노드 개수만큼 방문여부 체크  
-        for(int i= 0; i < n; i++) {
+        
+        boolean[] visited = new boolean[n]; // 방문 
+        
+        for(int i = 0;i < computers.length; i++) {
             if(!visited[i]) {
-                dfs(i,visited, computers); // 해당노드에 연결된거 dfs 
-                ans++; // +1
+                bfs(i, visited, computers, n);
+                ans++;
             }
         }
         
+        
         return ans;
     }
-    public static void dfs(int node, boolean[] visited, int [][] computers) {
-        visited[node] = true; // 현재노드 처리 
-        for(int next = 0; next < computers.length; next++) {
-            if(computers[node][next] == 1) {
-                if(!visited[next]) {
-                    dfs(next, visited, computers);
+    public static void bfs(int startNode, boolean[] visited, int[][] computers, int n) {
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(startNode);
+        visited[startNode] = true;
+        
+        while(!q.isEmpty()) {
+            int curNode = q.poll();
+            for(int nextNode = 0; nextNode < n; nextNode++) {
+                if((!visited[nextNode]) && (computers[curNode][nextNode] == 1)) {
+                    visited[nextNode] = true;
+                    q.offer(nextNode);
                 }
             }
-
+            
         }
     }
 }
