@@ -1,133 +1,102 @@
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.List;
-import java.util.stream.IntStream;
-
-import java.io.*;
-import java.util.*;
 
 public class Main {
-
-    public static int[] dr = {0,0,1,-1};
-    public static int[] dc = {1,-1,0,0};
-
-    public static int ans = Integer.MAX_VALUE;
-
-    public static void main(String[] args) throws Exception {
+    static int ans =Integer.MAX_VALUE;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer token = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer token= new StringTokenizer(br.readLine(), " ");
         int n = Integer.parseInt(token.nextToken());
-        int m = Integer.parseInt(token.nextToken());
-        Character[][] grid = new Character[n][n];
-        List<Point> allVirus = new ArrayList<>();
+        int m= Integer.parseInt(token.nextToken());
+
         int target = 0;
-        for(int r = 0; r < n; r++) {
+        List<int[]> allvirus = new ArrayList<>();
+
+        Character[][] grid = new Character[n][n];
+        for(int r =0; r< n; r++) {
             token = new StringTokenizer(br.readLine(), " ");
-            for(int c =0; c < n ; c ++) {
+            for(int c =0;c < n; c++) {
                 grid[r][c] = token.nextToken().charAt(0);
-                switch (grid[r][c]) {
-                    case '0': target++; break;
-                    case '2': allVirus.add(new Point(r, c,0)); // 바이러스 위치 저장
-                }
+                if(grid[r][c] == '0') target++;
+                else if(grid[r][c] == '2') allvirus.add(new int[]{r,c,0});
             }
         }
-	
-				
 
-        // 전체 바이러스 개수중 m개 뽑은 조합 activeVirus에 저장.
-        List<List<Point>> activeVirus = new ArrayList<>();
-        combination(new ArrayList<>(), allVirus, 0, m , activeVirus);
+        // 전체 바이러스 개수중 m개 뽑은 조합 activeVirust에 저장
+        List<List<int[]>> activeVirus = new ArrayList<>();
+        backtrack(new ArrayList<>(), allvirus, 0, m, activeVirus);
 
 
-        for(List<Point> active: activeVirus) {
-            Character[][] copy = copyGrid(grid);
+        for(List<int[]> active: activeVirus) {
+            // 2차원 배열 복사
+            Character[][] copy = new Character[n][n];
+            for(int r =0; r< n; r++)
+                copy[r] = Arrays.copyOf(grid[r], grid[r].length);
+
             bfs(active, copy, target);
+
         }
 
-        if(ans == Integer.MAX_VALUE) {
+        if(ans == Integer.MAX_VALUE)
             System.out.println(-1);
-        } else {
+        else
             System.out.println(ans);
-        }
     }
-
-    private static void bfs(List<Point> active, Character[][] copy, int target) {
-        Deque<Point> q = new ArrayDeque<>();
-        for(Point p: active) {
-            q.offer(p);
-            copy[p.r][p.c] = '1';
-        }
-        int infacted = 0;
-        int time = 0;
-
-        while (!q.isEmpty()) {
-            Point cur = q.poll();
-            int curRow = cur.r;
-            int curCol = cur.c;
-            int curTime = cur.time; // 경과시간
-            for(int i =0; i < 4; i++) {
-                int nextRow = curRow + dr[i];
-                int nextCol = curCol + dc[i];
-                if(isValid(nextRow, nextCol, copy) && copy[nextRow][nextCol] != '1') {
-                    if(copy[nextRow][nextCol] == '0') {
-                        infacted++;
-                        time = curTime + 1;
-                    }
-                    copy[nextRow][nextCol] = '1';
-                    q.add(new Point(nextRow, nextCol, curTime+1));
-                }
-            }
-            if(infacted == target) break;
-        }
-        if(infacted == target) {
-            ans = Math.min(ans, time);
-        }
-
-    }
-		/// 2차원 배열 복사 
-    static Character[][] copyGrid(Character[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
-        Character[][] result = new Character[n][m];
-        for(int r = 0; r < n ; r++) {
-            result[r] = Arrays.copyOf(grid[r], grid[r].length);
-        }
-        return result;
-    }
-    // 순회시 내부에 있는지
-    public static boolean isValid(int r, int c, Character[][] copy) {
-        int rowLen = copy.length;
-        int colLen = copy[0].length;
-        return ((0 <= r && r < rowLen) && (0 <= c & c < colLen));
-    }
-
     // 바이러스 개수중 m개만큼 조합
-    public static void combination(List<Point> curr, List<Point> allVirus, int start, int k, List<List<Point>> ans) {
-        if(curr.size() == k) {
+    public static void backtrack(List<int[]> curr, List<int[]> allvirust, int start, int k, List<List<int[]>> ans) {
+        if(curr.size() == k){
             ans.add(new ArrayList<>(curr));
             return;
         }
-        for(int i = start; i < allVirus.size() ;i++) {
-            curr.add(allVirus.get(i));
-            combination(curr, allVirus, i+1, k, ans);
-            curr.remove(curr.size() - 1);
+        for(int i = start; i < allvirust.size(); i++) {
+            curr.add(allvirust.get(i));
+            backtrack(curr, allvirust, i+1, k, ans);
+            curr.remove(curr.size()-1);
         }
     }
-
-    // 바이러스 위치 와 시간.
-    public static class Point {
-        int r, c, time;
-
-        public Point(int r, int c, int time) {
-            this.r = r;
-            this.c = c;
-            this.time = time;
+    public static void bfs(List<int[]> active, Character[][] copy, int target) {
+        Deque<int[]> q=  new ArrayDeque<>();
+        for(int[] p: active) {
+            int x = p[0];
+            int y = p[1];
+            q.offer(p);
+            copy[x][y] = '1';
         }
+        int[] dr = {0,0,1,-1};
+        int[] dc = {1,-1,0,0};
+
+        int infacted = 0;
+        int time = 0;
+        while(!q.isEmpty()) {
+            int[] cur = q.poll();
+            for(int i = 0;i < 4; i++) {
+                int nr = cur[0] + dr[i];
+                int nc = cur[1] + dc[i];
+                if((0 <= nr && nr < copy.length) && (0 <= nc && nc < copy[0].length) &&
+                    (copy[nr][nc] != '1')) {
+
+                    if(copy[nr][nc] == '0' ) {
+                        infacted++;
+                        time = cur[2]+1;
+                    }
+                    copy[nr][nc] = '1';
+                    q.offer(new int[]{nr,nc,cur[2]+1});
+                }
+
+
+            }
+            if(infacted == target) break;
+
+        }
+
+        if(infacted == target)
+            ans = Math.min(ans, time);
+
     }
 
 }
