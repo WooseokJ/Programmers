@@ -36,6 +36,8 @@ public class Main {
                 }
             }
         }
+	
+				
 
         // 전체 바이러스 개수중 m개 뽑은 조합 activeVirus에 저장.
         List<List<Point>> activeVirus = new ArrayList<>();
@@ -87,7 +89,7 @@ public class Main {
         }
 
     }
-
+		/// 2차원 배열 복사 
     static Character[][] copyGrid(Character[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
