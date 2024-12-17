@@ -3,13 +3,13 @@ class Solution {
     static int ans = 0;
     
     public int solution(int[] numbers, int target) {
-        bfs(numbers, target,0);
+        bfs(numbers, target);
         return ans;
     }
-    public static void bfs(int[] numbers, int target, int step) {
+    public static void bfs(int[] numbers, int target) {
         Deque<Integer> q = new ArrayDeque<>();
         q.offer(0);
-
+        
         // q에 합에대한게 담겨.
         for(int num: numbers) {
             int size = q.size();
@@ -19,12 +19,14 @@ class Solution {
                 q.offer(sum - num); // 0 - 4 -> 4 - 1 
             }
         }
-
+				// q에 원소 뺴면서 target찾아 
         while(!q.isEmpty()) {
-            int cur = q.poll();
-            if(cur == target) {
+            if(q.poll() == target) {
                 ans++;
             }
         }
+        
+        
+        
     }
 }
