@@ -1,40 +1,38 @@
 import java.util.*;
 class Solution {
     public String solution(String number, int k) {
-        int n = number.length();
-        int num = n-k;
+        int init_k = k;
         
         Deque<Character> stack = new ArrayDeque<>();
-        for(int i = 0; i < n; i++) {
-            char newVal = number.charAt(i);
-            
+        // stack.offerFirst()           stack.offerLast()
+        // stack. pollFirst()           stack.pollLast();
+        
+        for(int i =0; i < number.length(); i++) {
+            char curNum = number.charAt(i);
             while(!stack.isEmpty()) {
                 char top = stack.peekLast();
-								// stack의 원소보다 새로운 수가 더 크면
-                if(top < newVal) { // 2 < 9 
-                    // k == 0이면 -1이 되서 charAt(-1) = null되므로. 
-                    if(k == 0) break;
-                    stack.pollLast(); // pop
+                // 스택 탑 < 현재 원소 -> 교체작업
+                if(top < curNum) {
+                    if(k==0) break;
+                    stack.pollLast();
                     k--;
-                    
-                } else {
+                } else 
                     break;
-                }
-                
             }
-            
-            
-            stack.offerLast(newVal);
-            
+            stack.offerLast(curNum);
             
         }
         
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < num; i++)
-            sb.append(stack.pollFirst());
         
-        
-        
-        return sb.toString();
+            
+        StringBuilder ans = new StringBuilder();
+        for(int i= 0; i < number.length() - init_k; i++) {
+            ans.append(stack.pollFirst());
+        }
+        return ans.toString();
     }
-}   
+}
+
+// number.lengt() = n
+// 1,000,000!
+// k = 1,000,000 - 999,999 = 1 ! 
