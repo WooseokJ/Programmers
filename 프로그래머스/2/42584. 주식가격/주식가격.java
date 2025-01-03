@@ -9,22 +9,17 @@ class Solution {
         int idx = 0;
         while(!q.isEmpty()) {
             int curPrice = q.poll();
-            int start = prices.length - q.size();
-            // 현재idx+1부터 시작.
+            // 현재idx+1시작~ 끝까지 
             for(int i= idx+1; i < prices.length; i++) {
-                
-                ans[idx]++;
-                // 가격 떨어진경우
+                ans[idx]++; // 
+                // 현재가격보다 떨어진경우 -> 탈출.
                 if(curPrice > prices[i]) {
                     break;
                 }
-                
-                
             }
-            
             idx++;
-            
         }
+        
         return ans;
     }
 }
