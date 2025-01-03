@@ -46,7 +46,7 @@ class Solution {
             }
         }
         
-        // [ } false... 
+        
         if(stack.isEmpty()) {
             return true;
         } else {
