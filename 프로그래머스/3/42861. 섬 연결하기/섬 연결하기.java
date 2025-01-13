@@ -14,15 +14,17 @@ class Solution {
         boolean[] visited = new boolean[n];
         while(!pq.isEmpty()) {
             Info cur = pq.poll();
-            
-            if(visited[cur.node]) continue;
+            // 방문한적있으면 pass 
+            if(visited[cur.node]) continue; 
             visited[cur.node] = true;
+            // 가중치 낮은순서이므로 +해줌.
             ans+= cur.weight;
             
             if(map.containsKey(cur.node)) {
                 for(Info i: map.get(cur.node)) {
                     int next = i.node;
                     int weight =i.weight;
+                    // 가중치 낮은순서대로 차례대로 들어감.
                     pq.offer(new Info(next, weight));
                 }
                     
