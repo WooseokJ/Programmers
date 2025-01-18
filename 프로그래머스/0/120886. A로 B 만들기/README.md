@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 89.7 MB, 시간: 6.05 ms
+메모리: 85.3 MB, 시간: 1.47 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 11월 29일 17:10:40
+2025년 01월 18일 11:40:21
 
 ### 문제 설명
 
@@ -34,25 +34,13 @@
 <hr>
 
 <h5>입출력 예</h5>
-<table class="table">
-        <thead><tr>
-<th>before</th>
-<th>after</th>
-<th>result</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>"olleh"</td>
-<td>"hello"</td>
-<td>1</td>
-</tr>
-<tr>
-<td>"allpe"</td>
-<td>"apple"</td>
-<td>0</td>
-</tr>
-</tbody>
-      </table>
+
+<p>| before |after| result |  </p>
+
+<p>| --- | --- | --- |<br>
+| "olleh" | "hello" | 1 |<br>
+| "allpe" | "apple" | 0 |</p>
+
 <hr>
 
 <h5>입출력 예 설명</h5>
