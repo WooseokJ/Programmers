@@ -8,21 +8,27 @@ class Solution {
         
         Collections.sort(arr);
         
-        for(int i=0; i< arr.size(); i++) {
-            int h = arr.size() - i;
-            if(arr.get(i) >= h)
-                ans++;
+        for(int h= 1; h<= arr.size(); h++) {
+            
+            int cnt = 0;
+            for(int j= 0; j < arr.size(); j++) 
+                if(h <= arr.get(j)) 
+                    cnt++;    
+            
+            if(h <= cnt)
+                ans=h;
+            else
+                break;
             
         }
-        
         return ans;
     }
 }
 
 
 // n = citations.length
-// h편논문이 h편이상. 
-// citations[i] : 논문별 인용횟수 , i번이 citations[i]만큼 인용횟수 
-
-// 1번이 0 번만큼 인용됨. 
-// citations[i]>=i
+// h=1일떄 인용된 논문은 1번이상인용된 논문이 1편이상 [6,5,4,1]   길이(4) >= 1
+// h=2일떄 2번이상 인용된 논문이 2편이상 [6,5,3]  길이(3) >= 2
+// h=3일떄 3편이상 인용된 논문이 3편이상. [6,5,3] 길이(3) >= 3
+// h=4일떄 4편이상 [6,5] 길이(2) < 4 -> 조건불만족 
+// 
