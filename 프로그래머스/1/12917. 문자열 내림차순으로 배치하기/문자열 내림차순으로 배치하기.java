@@ -1,22 +1,19 @@
 import java.util.*;
 class Solution {
     public String solution(String s) {
+        StringBuilder sb= new StringBuilder();
         
-        List<Character> str = new ArrayList<>();
-        for(int i= 0;i < s.length(); i++)
-            str.add(s.charAt(i));
+        List<Character> arr = new ArrayList<>();
+        for(int i=0; i< s.length(); i++)
+            arr.add(s.charAt(i));
         
         
-        Collections.sort(str, Collections.reverseOrder());
-        
-        StringBuilder sb = new StringBuilder();
-        for(Character c: str)
+        Collections.sort(arr, Collections.reverseOrder());
+
+        for(Character c: arr)
             sb.append(c);
         
         
-        
         return sb.toString();
-        
-        
     }
 }
