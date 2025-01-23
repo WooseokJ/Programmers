@@ -1,44 +1,64 @@
 import java.util.*;
 class Solution {
     public int[] solution(int[] answers) {
-        int[] person = new int[3];
-        int[] one =  {1,2,3,4,5}; 
-        int[] two =   {2,1,2,3,2,4,2,5}; 
-        int[] thrid = {3,3,1,1,2,2,4,4,5,5}; 
+        List<Integer> arr = new ArrayList<>();
         
+        int[] one = new int[]  {1,2,3,4,5};
+        int[] two = new int[]  {2,1,2,3,2,4,2,5};
+        int[] third = new int[]{3,3,1,1,2,2,4,4,5,5};
+        
+        int oneSum = 0;
+        int twoSum = 0;
+        int thirdSum = 0;
         for(int i=0; i < answers.length; i++) {
             
-            int ok = answers[i];
-            int oIdx = i % one.length;
-            int tIdx = i % two.length;
-            int thIdx = i % thrid.length;
+            int aa = answers[i];
             
-            if(ok == one[oIdx]) person[0]++;
-            if(ok == two[tIdx]) person[1]++;
-            if(ok == thrid[thIdx]) person[2]++;
+            int oneIdx = i % one.length;
+            int twoIdx = i % two.length;
+            int thirdIdx = i % third.length;
+            // System.out.println(aa + " " + one[oneIdx] + " " + two[twoIdx] + " " +third[thirdIdx]);
+            if(one[oneIdx] == aa) {
+                oneSum++;
+            }
+            if(two[twoIdx] == aa) {
+                twoSum++;
+            }
+            if(third[thirdIdx] == aa) {
+                thirdSum++;
+            }
         }
-        List<Integer> temp = new ArrayList<>();
+        // System.out.println(oneSum + " " + twoSum + " " + thirdSum);
         
-        int max = Integer.MIN_VALUE;
-        for(int i= 0; i < 3; i++) {
-            max = Math.max(max, person[i]);
+        int max = 0;
+        if(oneSum >= twoSum) {
+            if(oneSum >= thirdSum) {
+                max = oneSum;
+            } else {
+                max = thirdSum;
+            }
+        } else {
+            if(twoSum >= thirdSum) {
+                max = twoSum;
+            } else {
+                max = thirdSum;
+            }
         }
-        for(int i= 0; i < 3; i++) {
-            if(max == person[i])
-                temp.add(i+1);
-        }
+        if(max == oneSum)
+            arr.add(1);
+        if(max == twoSum)
+            arr.add(2);
+        if(max == thirdSum)
+            arr.add(3);
         
-        
-        int[] ans = new int[temp.size()];
-        for(int i =0; i < temp.size(); i++)
-            ans[i] = temp.get(i);
-            
+        Collections.sort(arr);
+        int[] ans = new int[arr.size()];
+        for(int i= 0;i < arr.size(); i++)
+            ans[i] = arr.get(i);
         return ans;
     }
-}
 
-// 3명 
-// 12345 / 12345 
-// 21232425 / 21232425
-// 3311224455 / 33 -> 
-// return 많이 맞춘사람 누군지.
+}
+// 1 2 3 4 5
+// 2 1 2 3 2 4 2 5         
+// 3 3 1 1 2 2 4 4 5 5     
