@@ -1,25 +1,26 @@
 class Solution {
     public int solution(int n) {
+        int ans = 0;
         
-        StringBuilder ans = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         
         while(n != 0) {
-            ans.append(n%3);
-            n/=3;
+            sb.append(n % 3);
+            n /= 3;
         }
-        System.out.println(ans.toString());
-        int a = 0;
-        // int k = Integer.parseInt(ans.toString());
-        for(int i=0; i< ans.length();i++) {
-            int q = Integer.parseInt(String.valueOf(ans.charAt(i)));
-            if(q != 0 ) {
-                // System.out.println(q + " " + Math.pow(3, ans.length() - i) +" " + i);
-                a+=q * Math.pow(3,ans.length() - i -1);
-
+        System.out.println(sb.toString());
+        
+        for(int i=0; i < sb.length(); i++) {
+            int k = Integer.parseInt(String.valueOf(sb.charAt(i) ));
+            if(k != 0) {
+                // System.out.println(Math.pow(3, sb.length() - i - 1));
+                ans+= k * (Math.pow(3, sb.length() - i - 1));
             }
+            
         }
         
         
-        return a;
+        
+        return ans;
     }
 }
