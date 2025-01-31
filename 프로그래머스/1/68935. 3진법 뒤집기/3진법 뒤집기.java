@@ -1,42 +1,25 @@
 class Solution {
     public int solution(int n) {
-        int ans = 0;
-        StringBuilder sb = new StringBuilder();
-        while(n > 0) {
-            int temp = n % 3 ;
-            sb.insert(0,temp);
-            n /= 3;
+        
+        StringBuilder ans = new StringBuilder();
+        
+        while(n != 0) {
+            ans.append(n%3);
+            n/=3;
         }
-        
-        // sb.insert(0, n/3);
-        
-        
-        
-        
-        for(int i= 0; i < sb.length(); i++) {
-            char w = sb.charAt(i);
-            int a = (int) Math.pow(3,i);                
- 
-            if(w != '0') {
+        System.out.println(ans.toString());
+        int a = 0;
+        // int k = Integer.parseInt(ans.toString());
+        for(int i=0; i< ans.length();i++) {
+            int q = Integer.parseInt(String.valueOf(ans.charAt(i)));
+            if(q != 0 ) {
+                // System.out.println(q + " " + Math.pow(3, ans.length() - i) +" " + i);
+                a+=q * Math.pow(3,ans.length() - i -1);
 
-                ans += a * Integer.parseInt(String.valueOf(w));
-             
             }
-                
-
         }
         
-
-
         
-        
-        
-        return ans;
+        return a;
     }
 }
-
-// 45 % 3 -> 15 , 0
-//     15 %3 -> 5, 0
-//     5 % 3 -> 1, 2
-//     1 %3 -> 0,1
-    
