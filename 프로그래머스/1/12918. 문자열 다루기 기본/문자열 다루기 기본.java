@@ -1,16 +1,19 @@
 class Solution {
     public boolean solution(String s) {
-        boolean ans = true;
-        int n = s.length();
-        if(n == 4 || n == 6) {
-            for(int i= 0; i < s.length(); i++) {
+        boolean ans = false;
+        if((s.length() == 4 || s.length() == 6)) {
+            int cnt = 0;
+            for(int i=0;i < s.length(); i++) {
                 char c = s.charAt(i);
-                if(!Character.isDigit(c)) { // 숫자아니면
-                    return false;
+                // System.out.println(Character.isDigit(c));
+                if(Character.isDigit(c)) {
+                    cnt++;
                 }
             }
-        } else {
-            return false;
+            
+            
+            if(cnt == s.length())
+                ans = true;
         }
         
         
