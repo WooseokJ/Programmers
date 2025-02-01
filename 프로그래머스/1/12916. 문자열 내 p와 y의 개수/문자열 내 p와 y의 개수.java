@@ -1,22 +1,22 @@
 class Solution {
     boolean solution(String s) {
-        boolean ans = true;
-        int pCnt = 0;
-        int yCnt = 0;
+        int pcnt = 0;
+        int ycnt = 0;
         
-        for(int i =0; i < s.length(); i++) {
+        boolean ans = true;
+        for(int i=0; i < s.length(); i++) {
             char c = s.charAt(i);
             if(c == 'p' || c == 'P') {
-                pCnt++;
-            } else if(c == 'y' || c == 'Y') {
-                yCnt++;
+                pcnt++;
+            }else if(c == 'y' || c=='Y') {
+                ycnt++;
             }
-                
-        }        
+        }
+        
+        if(pcnt != ycnt)
+            ans = false;
         
 
-        if(pCnt == 0 && yCnt == 0) return true;
-        
-        return pCnt == yCnt;
+        return ans;
     }
 }
