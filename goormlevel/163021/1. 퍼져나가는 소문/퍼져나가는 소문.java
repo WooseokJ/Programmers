@@ -3,12 +3,11 @@ import java.util.*;
 class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		int m = Integer.parseInt(br.readLine());
-		Map<Integer, List<Integer>> map = new HashMap<>();
-		for(int i=1; i<=n;i++)
-			map.put(i, new ArrayList<>());
-		
+		int n= Integer.parseInt(br.readLine());
+		int m= Integer.parseInt(br.readLine());
+		Map<Integer, List<Integer>> map = new HashMap();
+		for(int i=1; i <= n;i++)
+			map.put(i, new ArrayList());
 		for(int i=0;i < m;i++) {
 			StringTokenizer token = new StringTokenizer(br.readLine(), " ");
 			int u = Integer.parseInt(token.nextToken());
@@ -33,9 +32,6 @@ class Main {
 			}
 		}
 		System.out.println(ans);
-		
-		
-		
 		
 	}
 }
