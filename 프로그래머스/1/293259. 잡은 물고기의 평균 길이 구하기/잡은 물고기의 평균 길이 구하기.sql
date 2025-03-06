@@ -1,11 +1,8 @@
 -- 코드를 작성해주세요
-select round(avg(ifnull(length,10)),2) as AVERAGE_LENGTH
-from fish_info
-
+select round(avg(ifnull(length, 10)),2) as AVERAGE_LENGTH
+from FISH_INFO
 
 # FISH_INFO
-# 잡은 물고기의 평균 길이를 출력하는 SQL문을 작성해주세요.
-
-# 평균 길이를 나타내는 컬럼 명은 AVERAGE_LENGTH로 해주세요.
-# 평균 길이는 소수점 3째자리에서 반올림하며, 10cm 이하의 물고기들은 10cm 로 취급하여 평균 길이를 구해주세요.
-
+# ID,       FISH_TYPE,       LENGTH,             TIME
+# 물고기의 ID, 물고기의 종류(숫자), 잡은 물고기의 길이(cm), 물고기를 잡은 날짜
+# length <= 10 는 null
